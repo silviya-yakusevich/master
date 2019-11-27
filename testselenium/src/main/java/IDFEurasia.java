@@ -74,6 +74,8 @@ public class IDFEurasia {
     public By sendMessage = By.xpath("//input[@value='SEND MESSAGE']"); //кнопка SEND MESSAGE в анкете вакансии
     public By thanks = By.xpath("(//div[@class = 'subtitle'])[2]");
 
+    public By dthanks = By.xpath("(//div[@class = 'subtitle'])[2]");
+
 
 
 }
