@@ -1,8 +1,12 @@
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class IDFEURtest {
@@ -18,7 +22,7 @@ public class IDFEURtest {
 
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe") ;
         ChromeOptions options = new ChromeOptions();
-        //options.addArguments("--headless");
+        options.addArguments("--headless");
         options.addArguments("--window-size=1920,1080");
         driver = new ChromeDriver(options);
 
@@ -30,5 +34,127 @@ public class IDFEURtest {
         idfEurasia = new IDFEurasia (driver);
 
     }
+    @Test //проверка отправки формы заявки на вакансию
+    public void sendCV() throws InterruptedException, IOException, AWTException {
+        idfEurasia.openVacation();
+        idfEurasia.fillTheForm();
+        idfEurasia.sendTheForm();
+        Assert.assertEquals("Ваше сообщение отправлено. Мы свяжемся с Вами в ближайшее время.", driver.findElement(idfEurasia.thanks).getText());
+    }
+
+
+    @Test//прокликивание основныйх страниц, сопоставление title
+    public void clickLinks() throws IOException
+    {
+        idfEurasia.clickMenu(idfEurasia.allLang);
+        idfEurasia.clickMenu(idfEurasia.kzLang);
+        idfEurasia.equalTitle("IDF Eurasia – ақылды қаржылық шешімдер");
+
+        idfEurasia.clickMenu(idfEurasia.allLang);
+        idfEurasia.clickMenu(idfEurasia.ruLang);
+        idfEurasia.equalTitle("IDF Eurasia – умные финансовые решения");
+
+//        idfEurasia.clickMenu(idfEurasia.enLang);
+//        idfEurasia.equalTitle("Fast Growing Fintech in Europe and Latam | IDFinance"); исправить текст
+
+        idfEurasia.clickMenu(idfEurasia.about);
+        idfEurasia.equalTitle("О нас - IDF Eurasia");
+
+        idfEurasia.clickMenu(idfEurasia.investors);
+        idfEurasia.equalTitle("Инвесторам - IDF Eurasia");
+
+        idfEurasia.clickMenu(idfEurasia.sustainability);
+        idfEurasia.equalTitle("Устойчивое развитие - IDF Eurasia");
+
+        idfEurasia.clickMenu(idfEurasia.media);
+        idfEurasia.equalTitle("Медиа - IDF Eurasia");
+
+        idfEurasia.moveToElement(idfEurasia.investors);
+        idfEurasia.clickMenu(idfEurasia.stock);
+        idfEurasia.equalTitle("Облигации - IDF Eurasia");
+
+        idfEurasia.moveToElement(idfEurasia.investors);
+        idfEurasia.clickMenu(idfEurasia.loans);
+        idfEurasia.equalTitle("Инвестиционные займы - IDF Eurasia");
+
+        idfEurasia.clickMenu(idfEurasia.privacyPolicy);
+        idfEurasia.equalTitle("Privacy Policy - IDF Eurasia");
+
+        idfEurasia.clickMenu(idfEurasia.legalNotice);
+        idfEurasia.equalTitle("Legal Notice - IDF Eurasia");
+
+        idfEurasia.clickMenu(idfEurasia.cookiesPolicy);
+        idfEurasia.equalTitle("Cookies Policy - IDF Eurasia");
+
+    }
+
+
+    @Test//проверка фильтра на странице "Карьера"
+    public void clickPositionsParams() throws IOException
+    {
+        idfEurasia.chooseVacanciesParams(idfEurasia.careerRussia);
+        idfEurasia.checkCareerTitle("Вакансии в России");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.careerKazahstan);
+        idfEurasia.checkCareerTitle("Вакансии в Казахстане");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.careerBelarus);
+        idfEurasia.checkCareerTitle("Вакансии в Беларуси");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.risk_dep);
+        idfEurasia.checkMenuItem("Управление рисками");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.analytics_dep);
+        idfEurasia.checkMenuItem("Аналитика");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.products_dep);
+        idfEurasia.checkMenuItem("Управление продуктом");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.dataScience_dep);
+        idfEurasia.checkMenuItem("Data science");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.verification_dep);
+        idfEurasia.checkMenuItem("Верификация");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.legal_dep);
+        idfEurasia.checkMenuItem("Юридический департамент");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.marketing_dep);
+        idfEurasia.checkMenuItem("Маркетинг и PR");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.collection_dep);
+        idfEurasia.checkMenuItem("Взыскание просроченной за...");
+        driver.navigate().back();
+
+        idfEurasia.chooseVacanciesParams(idfEurasia.fin_dep);
+        idfEurasia.checkMenuItem("Финансы");
+        driver.navigate().back();
+
+    }
+
+
+    @Test //проверка кода ответа
+    public void checkResponseCodeKZ () throws IOException {
+        idfEurasia.checkResponseCode("https://idfeurasia.com/", idfEurasia.kzLang);
+    }
+
+
+//    @Test
+//    public void checkResponseCodeES () throws IOException {
+//        idfEurasia.checkResponseCode("https://idfinance.com/", idfEurasia.esLang);
+//    }
+
+
+
 
 }

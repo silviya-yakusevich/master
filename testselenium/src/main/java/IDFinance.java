@@ -210,7 +210,7 @@ public class IDFinance {
     public IDFinance checkResponseCode(String link, By lang) throws IOException {
 
         driver.get(link);
-        driver.findElement(esLang).click();//переход в ЛК
+        driver.findElement(lang).click();
         URL url = new URL(driver.getCurrentUrl());
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
         http.setRequestMethod("GET");
