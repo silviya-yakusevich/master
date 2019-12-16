@@ -17,14 +17,14 @@ public class MainPage {
         this.driver = driver;
     }
 
-    public By promoField = By.className("mainCalculator__input__promo"); //поле для ввода промокода
-    public By promoLink = By.xpath("//label[text()='У меня есть промокод']");//ссылка "У меня есть промокод"
-    public By promoValidateText = By.xpath("//span[@class='validateText']");// поле текста валидационного сообщения
-    public By calc_amount = By.xpath("//input[@id = 'money']"); // поле значения суммы
-    public By calc_days = By.xpath("//input[@id = 'days']");  // поле значения дней
-    public By sum_slider = By.xpath("//div[@class='mainCalculator__slider mainCalculator__sum ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content']//span[1]"); //слайдер суммы
-    public By days_slider = By.xpath("//div[@class='mainCalculator__date mainCalculator__slider ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content']//span[1]"); //слайдер дней
-    public By getMoneyButton = By.className("mainCalculator__center");// кнопка "Получить деньги" на калькуляторе
+    public By promoField = By.xpath("//input[@id='rpromo']"); //поле для ввода промокода
+    public By promoLink = By.xpath("//a[text()='У меня есть промокод']");//ссылка "У меня есть промокод"
+    public By promoValidateText = By.xpath("//div[@class='result']");// поле текста валидационного сообщения
+    public By calc_amount = By.xpath("(//div[@class='rcalc_item_input']//input[@type = 'text'])[1]"); // поле значения суммы
+    public By calc_days = By.xpath("(//div[@class='rcalc_item_input']//input[@type = 'text'])[2]");  // поле значения дней
+    public By sum_slider = By.xpath("(//span[@class='ui-slider-handle ui-corner-all ui-state-default'])[1]"); //слайдер суммы
+    public By days_slider = By.xpath("(//span[@class='ui-slider-handle ui-corner-all ui-state-default'])[2]"); //слайдер дней
+    public By getMoneyButton = By.xpath("//div[@class='rcalc_submit btn btn_red']");// кнопка "Получить деньги" на калькуляторе
     public By loginButton = By.className("header_private_link"); // кнопка "Личный кабинет"
 
     public By about = By.xpath("//a[text() = 'О нас']");
@@ -45,7 +45,7 @@ public class MainPage {
 
     public MainPage clickPromo()// кликнуть "У меня есть промокод"
     {
-        driver.findElement(promoLink).click();//кликнуть на кнопку "Уменя есть промокод" на калькуляторе
+        driver.findElement(promoLink).click();//кликнуть на кнопку "У меня есть промокод" на калькуляторе
         return this;
 
     }
@@ -80,9 +80,9 @@ public class MainPage {
         return text;
     }
 
-    public String checkpromocodeCookie () //проверка создания куки checkpromocode и ее значения
+    public String promocodeCookie () //проверка создания куки checkpromocode и ее значения
     {
-       String check = driver.manage().getCookieNamed("checkpromocode").getValue(); //значение параметра checkpromocode в куках
+       String check = driver.manage().getCookieNamed("promocode").getValue(); //значение параметра promocode в куках
        return check;
     }
 
@@ -96,13 +96,13 @@ public class MainPage {
         return this;
     }
 
-    public MainPage calcValue(String sum, String days)//сравнение дефолтнах знаечений суммы
+    public MainPage calcValue(String expectedSum, String expectedDays)//сравнение дефолтнах знаечений суммы
     {
         String sumValue = driver.findElement(calc_amount).getAttribute("value");//значение суммы на калькуляторе
         String daysValue = driver.findElement(calc_days).getAttribute("value");//значение дней  на калькуляторе
 
-          Assert.assertTrue("Default sum is correct", sumValue.equals(sum));
-          Assert.assertTrue("Default days are correct", daysValue.equals(days));
+        Assert.assertEquals(expectedSum, sumValue);
+        Assert.assertEquals(expectedDays, daysValue);
 
 
         return this;
@@ -113,8 +113,8 @@ public class MainPage {
         Actions move = new Actions(driver);
         WebElement sumSlider = driver.findElement(sum_slider);
         WebElement daysSlider = driver.findElement(days_slider);
-        move.dragAndDropBy(sumSlider, xOffset,yOffset).release().build().perform();
-        move.dragAndDropBy(daysSlider, xOffset,yOffset).release().build().perform();
+        move.dragAndDropBy(sumSlider, xOffset, yOffset).release().build().perform();
+        move.dragAndDropBy(daysSlider, xOffset, yOffset).release().build().perform();
         return this;
     }
 

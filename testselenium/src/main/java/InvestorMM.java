@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -34,9 +35,18 @@ public class InvestorMM {
     public By term6month = By.xpath("//div[@class='calc_term calc_item']//label[@for='term1']");
     public By term12month = By.xpath("//div[@class='calc_term calc_item']//label[@for='term2']");
     public By term24month = By.xpath("//div[@class='calc_term calc_item']//label[@for='term3']");
-    public By amountInput = By.xpath("//input[@id= 'desktop-input']"); //инпут для воода инвестируемой суммы
+    public By amountInput = By.xpath("//input[@id= 'desktop-input']"); //инпут для ввода инвестируемой суммы
     String profitAmount = driver.findElement(By.xpath("//div[@class='profit_value']")).getText();//сумма вложений, выводимая после выбора значения
     String profitSum = driver.findElement(By.xpath("//div[@class='profit_sum']")).getText(); // сумма вложений + дохода от вложений за указанный срок
+    double rub_6 = 0.11;
+    double rub_12 = 0.13;
+    double rub_24 = 0.14;
+    double usd_6 = 0.06;
+    double usd_12 = 0.09;
+    double usd_24 = 0.09;
+    double eur_6 = 0.05;
+    double eur_12 = 0.08;
+    double eur_24 = 0.08;
     public By lastName = By.xpath("//input[@name = 'lastname']");
     public By firstName = By.xpath("//input[@name = 'io']");
     public By phone = By.xpath("//input[@name = 'phone']");
@@ -46,10 +56,43 @@ public class InvestorMM {
     public By agreement  = By.xpath("(//span[contains(normalize-space(), 'Я согласен с ')])[1]"); //чекбокс "Я согласен с условиями"
     public By agreementLink  = By.xpath("//a[text()='условиями']"); //ссылка на документ с условиями
     public By submit  = By.xpath("(//input[@type = 'submit'])[1]");//кнопка "Оставить заявку"
-
+    public By thanks = By.xpath("//div[@class='thanks_wrapper']");
 
     //ПОДПИСКА НА НОВОСТИ
     public By emailSubscription = By.xpath("(//input[@name = 'email'])[2]"); //поле для ввода email для подписки на рассылку
     public By submitSubscription  = By.xpath("(//input[@type = 'submit'])[2]"); // кнопка подписки на рассылку
+
+
+
+    public InvestorMM clickOnTheLinks(By link) {
+        driver.findElement(link).click();
+        return this;
+    }
+    public InvestorMM chooseParams(By currency, By term, int amount,double percent) {
+        driver.findElement(currency).click();
+        driver.findElement(term).click();
+        driver.findElement(amountInput).sendKeys(String.valueOf(amount));
+        double sum = amount * percent;
+        Assert.assertEquals(amount + " руб.", profitAmount);
+        Assert.assertEquals(Math.round(sum) + " руб.", profitSum);
+        return this;
+    }
+    public InvestorMM fillThForm(String lastname, String firstname, String phonenumber, String emailaddress){
+
+        driver.findElement(lastName).sendKeys(lastname);
+        driver.findElement(firstName).sendKeys(firstname);
+        driver.findElement(phone).sendKeys(phonenumber);
+        driver.findElement(email).sendKeys(emailaddress);
+        driver.findElement(requestСontract).click();
+        driver.findElement(requestFin).click();
+
+        return this;
+    }
+
+    public InvestorMM submitTheForm(){
+        driver.findElement(submit).click();
+        return this;
+    }
+
 
 }

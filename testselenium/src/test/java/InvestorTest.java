@@ -1,4 +1,6 @@
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -26,9 +28,23 @@ public class InvestorTest {
 
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-        driver.get("http://moneyman:1005@qa-delivery-idfinance-eurasia-ru-master.moneyman.ru/");
+        driver.get("http://moneyman:1005@http://qa-delivery-investor-ru-master.moneyman.ru/");
 
         investor = new InvestorMM (driver);
+
+    }
+
+
+    @Test
+
+    public void sendRequest(){
+
+        driver.findElement(investor.calculator);
+        investor.chooseParams(investor.currencyUSD, investor.term12month,2000000, investor.usd_12);
+        investor.fillThForm("Test", "Test", "1111111111", "test@test.te");
+        investor.submitTheForm();
+        Assert.assertEquals("Спасибо, ваша заявка принята!", driver.findElement(investor.thanks).getText());
+
 
     }
 }

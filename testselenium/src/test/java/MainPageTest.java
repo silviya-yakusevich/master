@@ -21,14 +21,14 @@ public class MainPageTest {
        // System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
-       ChromeOptions options = new ChromeOptions();
-       options.setHeadless(true);
-       options.addArguments("--headless");
-       driver = new ChromeDriver(options);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless");
+        options.addArguments("--window-size=1920,1080");
+        driver = new ChromeDriver(options);
 
-       //driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
-        driver.manage().window().maximize();
+//        driver = new FirefoxDriver();
+//        driver.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
+//        driver.manage().window().maximize();
         driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru?partner=mmru&utm_source=mm&utm_medium=mm&utm_campaign=mm&keyword=mm&wmid=mm&utm_term=mm&utm_content=mm");
         mainPage = new MainPage (driver);
     }
@@ -37,7 +37,7 @@ public class MainPageTest {
     public void correctPromo(){
         mainPage.clickPromo();
         mainPage.sendPromo("MF");
-        Assert.assertEquals("Ваша скидка 25.00%!", mainPage.getValidateText());
+        Assert.assertEquals("Ваша скидка 25%", mainPage.getValidateText());
     }
 
     @Test
@@ -51,9 +51,9 @@ public class MainPageTest {
     public void cookiePromo(){
 
         mainPage.setCookie("promocode","MF");
-        mainPage.checkpromocodeCookie();
+        mainPage.promocodeCookie();
 
-        Assert.assertEquals("MF", mainPage.checkpromocodeCookie());
+        Assert.assertEquals("MF", mainPage.promocodeCookie());
     }
 
     @Test
@@ -71,8 +71,8 @@ public class MainPageTest {
     public void defaultValue(){
 
         mainPage.calcValue("9000","24");
-        mainPage.dragAndDrop(30,0);
-        mainPage.calcValue("14000", "29");
+        mainPage.dragAndDrop(15,0);
+        mainPage.calcValue("11500", "25");
 
     }
 
@@ -83,10 +83,10 @@ public class MainPageTest {
 
         mainPage.authRegistration();
         mainPage.clickGetMoney();
-        Assert.assertTrue("Reqistration button is ok", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/registration/static/step1.html"));
+        Assert.assertTrue("Reqistration button", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/registration/static/step1.html"));
         driver.navigate().back();
         mainPage.clickLogin();
-        Assert.assertTrue("Login button is ok", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/secure/login"));
+        Assert.assertTrue("Login button", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/secure/login"));
     }
 
     @Test
