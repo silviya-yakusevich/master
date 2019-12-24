@@ -130,7 +130,7 @@ public class IDFinance {
         driver.findElement(lastName).sendKeys("ТЕСТ");
         driver.findElement(email).sendKeys("test@test.te");
         driver.findElement(message).sendKeys("ТЕСТ");
-        driver.findElement(uploadFile).sendKeys("C:\\Users\\User10\\Desktop\\111.docx");
+        driver.findElement(uploadFile).sendKeys("C:\\Users\\User10\\Desktop\\test.docx");
         new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='droparea has-file']")))); //ожидание успешной загрузки файла
 
         return this;
