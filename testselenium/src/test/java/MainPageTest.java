@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class MainPageTest {
 
 
-    public static class Inner1 {
+    public static class MMRUmain {
 
     private WebDriver driver;
     private MainPage mainPage;
