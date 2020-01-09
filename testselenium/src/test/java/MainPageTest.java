@@ -1,4 +1,6 @@
 import org.junit.*;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -7,166 +9,213 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+@RunWith(Enclosed.class)
 public class MainPageTest {
 
+
+    public static class Inner1 {
 
     private WebDriver driver;
     private MainPage mainPage;
 
 
 
-    @Before
-    public void setUp()
-    {
-       // System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
+        @Before
+        public void setUp() {
+            // System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
+            System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
-        options.addArguments("--window-size=1920,1080");
-        driver = new ChromeDriver(options);
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+            options.addArguments("--window-size=1920,1080");
+            driver = new ChromeDriver(options);
 
 //        driver = new FirefoxDriver();
 //        driver.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
 //        driver.manage().window().maximize();
-        driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru?partner=mmru&utm_source=mm&utm_medium=mm&utm_campaign=mm&keyword=mm&wmid=mm&utm_term=mm&utm_content=mm");
-        mainPage = new MainPage (driver);
+            driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru?partner=mmru&utm_source=mm&utm_medium=mm&utm_campaign=mm&keyword=mm&wmid=mm&utm_term=mm&utm_content=mm");
+            mainPage = new MainPage(driver);
+        }
+
+        @Test
+        public void correctPromo() {
+            mainPage.clickPromo();
+            mainPage.sendPromo("MF");
+            Assert.assertEquals("Ваша скидка 25%", mainPage.getValidateText());
+        }
+
+        @Test
+        public void incorrectPromo() {
+            mainPage.clickPromo();
+            mainPage.sendPromo("147");
+            Assert.assertEquals("Введен неверный промокод", mainPage.getValidateText());
+        }
+
+        @Test
+        public void cookiePromo() {
+
+            mainPage.setCookie("promocode", "MF");
+            mainPage.promocodeCookie();
+
+            Assert.assertEquals("MF", mainPage.promocodeCookie());
+        }
+
+        @Test
+        public void checkCookies() {
+
+            mainPage.clickGetMoney();
+            mainPage.checkAllCookies("mmru", "mm", "101");
+
+            driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru?partner=123");
+            mainPage.clickGetMoney();
+            mainPage.checkAllCookies("123", "NULL", "101");
+        }
+
+        @Test
+        public void defaultValue() {
+
+            mainPage.calcValue("9000", "24");
+            mainPage.dragAndDrop(15, 0);
+            mainPage.calcValue("11500", "25");
+
+        }
+
+
+        @Test
+
+        public void regPage() {
+
+            mainPage.authRegistration();
+            mainPage.clickGetMoney();
+            Assert.assertTrue("Reqistration button", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/registration/static/step1.html"));
+            driver.navigate().back();
+            mainPage.clickLogin();
+            Assert.assertTrue("Login button", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/secure/login"));
+        }
+
+        @Test
+        public void responseCodeReg() throws IOException {
+
+            mainPage.checkResponseCode("https://moneyman.ru", mainPage.getMoneyButton);
+
+        }
+
+        @Test
+        public void responseCodeLogin() throws IOException {
+
+            mainPage.checkResponseCode("https://moneyman.ru", mainPage.loginButton);
+        }
+
+        @Test
+        public void responseCodeMain() throws IOException {
+
+            mainPage.checkResponseCode("https://moneyman.ru/lp/main", mainPage.loginButton);
+        }
+
+        @Test
+        public void responseCodeMain3() throws IOException {
+
+            mainPage.checkResponseCode("https://moneyman.ru/lp/main3", mainPage.loginButton);
+        }
+
+        @Test
+        public void clickMenu() throws IOException {
+
+            mainPage.clickMenu(mainPage.about);
+            mainPage.comparison("Moneyman – ваш личный финансовый помощник");
+
+            mainPage.clickMenu(mainPage.howItWorks);
+            mainPage.comparison("Как это работает");
+
+            mainPage.clickMenu(mainPage.recieveMoney);
+            mainPage.comparison("Как получить онлайн займ");
+
+            mainPage.clickMenu(mainPage.returnCredit);
+            mainPage.comparison("Как погасить заем");
+
+            mainPage.clickMenu(mainPage.faq);
+            mainPage.comparison("Вопросы и ответы");
+
+            mainPage.clickMenu(mainPage.news);
+            mainPage.comparison("Новости и акции");
+
+            mainPage.clickMenu(mainPage.docs);
+            mainPage.comparison("Документы");
+
+            mainPage.clickMenu(mainPage.inform);
+            mainPage.comparison("Раскрытие информации");
+
+            mainPage.clickMenu(mainPage.contacts);
+            mainPage.comparison("Контакты");
+
+            mainPage.clickMenu(mainPage.spisok);
+            mainPage.comparison("Список акционеров (участников) микрофинансовой компании и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
+
+            mainPage.clickMenu(mainPage.scheme);
+            mainPage.comparison("Схема взаимосвязей участников ООО МФК «Мани Мен» и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
+
+            mainPage.clickMenu(mainPage.zhaloba);
+            mainPage.comparison("Приемная омбудсмена по правам заемщика");
+
+            mainPage.clickMenu(mainPage.invest);
+            mainPage.tabs();
+            mainPage.comparison("Зарабатывай вместе с MoneyMan");
+
+
+        }
+
+        @After
+        public void tearDown() {
+            mainPage.quit();
+
+        }
     }
 
-    @Test
-    public void correctPromo(){
-        mainPage.clickPromo();
-        mainPage.sendPromo("MF");
-        Assert.assertEquals("Ваша скидка 25%", mainPage.getValidateText());
-    }
-
-    @Test
-    public void incorrectPromo(){
-        mainPage.clickPromo();
-        mainPage.sendPromo("147");
-        Assert.assertEquals("Введен неверный промокод", mainPage.getValidateText());
-    }
-
-    @Test
-    public void cookiePromo(){
-
-        mainPage.setCookie("promocode","MF");
-        mainPage.promocodeCookie();
-
-        Assert.assertEquals("MF", mainPage.promocodeCookie());
-    }
-
-    @Test
-    public void checkCookies(){
-
-        mainPage.clickGetMoney();
-        mainPage.checkAllCookies("mmru","mm", "101");
-
-        driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru?partner=123");
-        mainPage.clickGetMoney();
-        mainPage.checkAllCookies("123","NULL", "101");
-    }
-
-    @Test
-    public void defaultValue(){
-
-        mainPage.calcValue("9000","24");
-        mainPage.dragAndDrop(15,0);
-        mainPage.calcValue("11500", "25");
-
-    }
+    public static class lpmain_values {
 
 
-    @Test
+        private WebDriver driver;
+        private MainPage mainPage;
 
-    public void regPage(){
+        @Before
+        public void setUp2() {
 
-        mainPage.authRegistration();
-        mainPage.clickGetMoney();
-        Assert.assertTrue("Reqistration button", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/registration/static/step1.html"));
-        driver.navigate().back();
-        mainPage.clickLogin();
-        Assert.assertTrue("Login button", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/secure/login"));
-    }
+            System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
-    @Test
-    public void responseCodeReg() throws IOException {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+            options.addArguments("--window-size=1920,1080");
+            driver = new ChromeDriver(options);
+            mainPage = new MainPage(driver);
+        }
 
-        mainPage.checkResponseCode("https://moneyman.ru", mainPage.getMoneyButton);
+        @Test
+        public void defaultValue_lpmain() {
+
+           driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru/lp/main");
+
+            mainPage.calcValue("9000", "15");
+            mainPage.dragAndDrop(15, 0);
+            mainPage.calcValue("11500", "16");
+
+        }
+
+        @Test
+        public void defaultValue_lpmain3() {
+
+            driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru/lp/main3");
+
+            mainPage.calcValue("12000", "15");
+            mainPage.dragAndDrop(15, 0);
+            mainPage.calcValue("14500", "16");
+
+        }
 
     }
-
-    @Test
-    public void responseCodeLogin() throws IOException {
-
-        mainPage.checkResponseCode("https://moneyman.ru", mainPage.loginButton);
-    }
-
-    @Test
-    public void responseCodeMain() throws IOException {
-
-        mainPage.checkResponseCode("https://moneyman.ru/lp/main", mainPage.loginButton);
-    }
-
-    @Test
-    public void responseCodeMain3() throws IOException {
-
-        mainPage.checkResponseCode("https://moneyman.ru/lp/main3", mainPage.loginButton);
-    }
-
-    @Test
-    public void clickMenu() throws IOException {
-
-        mainPage.clickMenu(mainPage.about);
-        mainPage.comparison("Moneyman – ваш личный финансовый помощник");
-
-        mainPage.clickMenu(mainPage.howItWorks);
-        mainPage.comparison("Как это работает");
-
-        mainPage.clickMenu(mainPage.recieveMoney);
-        mainPage.comparison("Как получить онлайн займ");
-
-        mainPage.clickMenu(mainPage.returnCredit);
-        mainPage.comparison("Как погасить заем");
-
-        mainPage.clickMenu(mainPage.faq);
-        mainPage.comparison("Вопросы и ответы");
-
-        mainPage.clickMenu(mainPage.news);
-        mainPage.comparison("Новости и акции");
-
-        mainPage.clickMenu(mainPage.docs);
-        mainPage.comparison("Документы");
-
-        mainPage.clickMenu(mainPage.inform);
-        mainPage.comparison("Раскрытие информации");
-
-        mainPage.clickMenu(mainPage.contacts);
-        mainPage.comparison("Контакты");
-
-        mainPage.clickMenu(mainPage.spisok);
-        mainPage.comparison("Список акционеров (участников) микрофинансовой компании и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
-
-        mainPage.clickMenu(mainPage.scheme);
-        mainPage.comparison("Схема взаимосвязей участников ООО МФК «Мани Мен» и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
-
-        mainPage.clickMenu(mainPage.zhaloba);
-        mainPage.comparison("Приемная омбудсмена по правам заемщика");
-
-        mainPage.clickMenu(mainPage.invest);
-        mainPage.tabs();
-        mainPage.comparison("Зарабатывай вместе с MoneyMan");
-
-
-    }
-
-    @After
-    public void tearDown()
-    {
-        mainPage.quit();
 
     }
 
 
 
-}
+
+

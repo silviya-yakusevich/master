@@ -35,35 +35,35 @@ public class DashmanTest {
     @Test
     public void correctCookie(){
 
-        driver.findElement(By.xpath("//span[@id='getmoney']")).click();
+        driver.findElement(By.xpath("(//a[text() ='Получить деньги'])[1]")).click();
         dashmanPage.checkAllCookies("mmru","mm", "102");
 
         driver.get("http://money-man.ru?partner=123");
-        driver.findElement(By.xpath("//span[@id='getmoney']")).click();
+        driver.findElement(By.xpath("(//a[text() ='Получить деньги'])[1]")).click();
         dashmanPage.checkAllCookies("123","NULL", "102");//проверка зануления параметров при пробросе только partner
     }
 
     @Test
     public void responseCodeRegMain() throws IOException {
-        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("//span[@id='getmoney']"));
+        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("(//a[text() ='Получить деньги'])[1]"));
 
     }
 
     @Test
     public void responseCodeRegMainMid() throws IOException {
-        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("//a[@class='btn discountBanner__btn']"));
+        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("(//a[text() ='Получить деньги'])[1]"));
 
     }
     @Test
     public void responseCodeRegMainTf() throws IOException {
-        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("//a[@class='rates_link']"));
+        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("//a[@class='rates_item']"));
 
     }
 
 
     @Test
     public void responseCodeLogin() throws IOException {
-        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("//a[@class='headerPrivate__link']"));
+        dashmanPage.checkResponseCode("https://money-man.ru", By.xpath("//a[@class='private-area']"));
 
     }
 
