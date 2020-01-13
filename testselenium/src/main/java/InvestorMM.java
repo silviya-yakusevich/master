@@ -1,6 +1,8 @@
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class InvestorMM {
 
@@ -36,8 +38,7 @@ public class InvestorMM {
     public By term12month = By.xpath("//div[@class='calc_term calc_item']//label[@for='term2']");
     public By term24month = By.xpath("//div[@class='calc_term calc_item']//label[@for='term3']");
     public By amountInput = By.xpath("//input[@id= 'desktop-input']"); //инпут для ввода инвестируемой суммы
-    String profitAmount = driver.findElement(By.xpath("//div[@class='profit_value']")).getText();//сумма вложений, выводимая после выбора значения
-    String profitSum = driver.findElement(By.xpath("//div[@class='profit_sum']")).getText(); // сумма вложений + дохода от вложений за указанный срок
+
     double rub_6 = 0.11;
     double rub_12 = 0.13;
     double rub_24 = 0.14;
@@ -64,6 +65,18 @@ public class InvestorMM {
 
 
 
+    public String profitAmountField () //получить текст валидацинного сообщения
+    {
+        String profitAmount = driver.findElement(By.xpath("//div[@class='profit_value']")).getText();//сумма вложений, выводимая после выбора значения
+        return profitAmount;
+    }
+
+    public String profitSumField () //получить текст валидацинного сообщения
+    {
+        String profitSum = driver.findElement(By.xpath("//div[@class='profit_value']")).getText();// сумма вложений + дохода от вложений за указанный срок
+        return profitSum;
+    }
+
     public InvestorMM clickOnTheLinks(By link) {
         driver.findElement(link).click();
         return this;
@@ -73,8 +86,8 @@ public class InvestorMM {
         driver.findElement(term).click();
         driver.findElement(amountInput).sendKeys(String.valueOf(amount));
         double sum = amount * percent;
-        Assert.assertEquals(amount + " руб.", profitAmount);
-        Assert.assertEquals(Math.round(sum) + " руб.", profitSum);
+        Assert.assertEquals(amount + " руб.", profitAmountField());
+        Assert.assertEquals(Math.round(sum) + " руб.", profitSumField());
         return this;
     }
     public InvestorMM fillThForm(String lastname, String firstname, String phonenumber, String emailaddress){
@@ -93,6 +106,20 @@ public class InvestorMM {
         driver.findElement(submit).click();
         return this;
     }
+
+    public InvestorMM clickMenu(By link) {
+        driver.findElement(link).click();
+//        WebDriverWait wait = (new WebDriverWait(driver,10));// явное ожидание
+//        wait.until (ExpectedConditions.visibilityOfAllElements());
+        return this;
+    }
+
+    public InvestorMM comparison (String h1) {
+
+        Assert.assertEquals(h1, driver.findElement(By.xpath("//h1")).getText());
+        return this;
+    } // сравнение заголовка с заданным значением
+
 
 
 }
