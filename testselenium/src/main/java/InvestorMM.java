@@ -12,20 +12,20 @@ public class InvestorMM {
     }
 
     public By about = By.xpath("//a[text()='О компании']");
-    public By mfo = By.xpath("//a[text()='Рынок МФО']");
-    public By news = By.xpath("//a[text()='Новости']");
-    public By management = By.xpath("//a[text()='Руководство']");
-    public By reviews = By.xpath("//a[text()='Отзывы']");
-    public By documents = By.xpath("//a[text()='Документы']");
-    public By requisites = By.xpath("//a[text()='Реквизиты']");
+    public By mfo = By.xpath("(//a[text()='Рынок МФО'])[2]");
+    public By news = By.xpath("(//a[text()='Новости'])[2]");
+    public By management = By.xpath("(//a[text()='Руководство'])[2]");
+    public By reviews = By.xpath("(//a[text()='Отзывы'])[2]");
+    public By documents = By.xpath("(//a[text()='Документы'])[2]");
+    public By requisites = By.xpath("(//a[text()='Реквизиты'])[2]");
 
     public By investment = By.xpath("//a[text()='Инвестиционное предложение']");
-    public By tariffs = By.xpath("//a[text()='Тарифы']");
-    public By howToInvest = By.xpath("//a[text()='Как инвестировать?']");
-    public By faq = By.xpath("//a[text()='Вопросы и ответы']");
+    public By tariffs = By.xpath("(//a[text()='Тарифы'])[2]");
+    public By howToInvest = By.xpath("(//a[text()='Как инвестировать?'])[2]");
+    public By faq = By.xpath("(//a[text()='Вопросы и ответы'])[2]");
 
     public By calculator = By.xpath("//a[text()='Калькулятор доходности']");
-    public By onlineRequest = By.xpath("//a[text()='Онлайн заявка']");
+    public By onlineRequest = By.xpath("//span[text()='Онлайн заявка']");
     public By toInvest = By.xpath("//a[text()='Вложить деньги']"); //кнопка "Вложить деньги" на главной странице
     public By toCalcYield = By.xpath("//a[text()='Рассчитать доходность']"); //кнопка "Рассчитать доходность" на главной странице
 
@@ -109,8 +109,7 @@ public class InvestorMM {
 
     public InvestorMM clickMenu(By link) {
         driver.findElement(link).click();
-//        WebDriverWait wait = (new WebDriverWait(driver,10));// явное ожидание
-//        wait.until (ExpectedConditions.visibilityOfAllElements());
+
         return this;
     }
 
@@ -119,6 +118,13 @@ public class InvestorMM {
         Assert.assertEquals(h1, driver.findElement(By.xpath("//h1")).getText());
         return this;
     } // сравнение заголовка с заданным значением
+
+    public InvestorMM waitElement (By linkForWait) {
+
+        WebDriverWait wait = (new WebDriverWait(driver,10));// явное ожидание
+        wait.until (ExpectedConditions.presenceOfElementLocated(linkForWait));
+        return this;
+    } //
 
 
 
