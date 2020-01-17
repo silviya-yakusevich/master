@@ -8,6 +8,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -19,41 +22,48 @@ public class InvestorTest {
     @Before
     public void setUp()
     {
-//        System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
-//        driver = new FirefoxDriver();
+        System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
+        driver = new FirefoxDriver();
 
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe") ;
-        ChromeOptions options = new ChromeOptions();
-        options.setHeadless(true);
-        options.addArguments("--window-size=1920,1080");
-        driver = new ChromeDriver(options);
+//        System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe") ;
+//        ChromeOptions options = new ChromeOptions();
+//        options.setHeadless(true);
+//        options.addArguments("--window-size=1920,1080");
+//        driver = new ChromeDriver(options);
 
 
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
-        driver.get("http://moneyman:1005@qa-delivery-investor-ru-master.moneyman.ru/");
-
         investor = new InvestorMM (driver);
 
     }
 
-    @Ignore
+
     @Test
 
     public void sendRequest(){
 
-        driver.findElement(investor.calculator);
+        driver.get("https://investor.moneyman.ru/");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        investor.clickMenu(investor.calculator);
         investor.chooseParams(investor.currencyUSD, investor.term12month,2000000, investor.usd_12);
-        investor.fillThForm("Test", "Test", "1111111111", "test@test.te");
+        investor.fillThForm("Test" + " " + dateFormat.format( new Date()),
+                            "Test" + " " + dateFormat.format( new Date()),
+                            "1(234) 56"+Math.round((investor.getRandomIntegerBetweenRange(10000,99999))),
+                            "test"+ dateFormat.format( new Date())+"@test.te");
         investor.submitTheForm();
-        Assert.assertEquals("Спасибо, ваша заявка принята!", driver.findElement(investor.thanks).getText());
-
+        Assert.assertEquals("Спасибо, ваша заявка принята!\n" +
+                                     "Наши специалисты свяжутся с вами в ближайшее время.\n" +
+                                     "Благодарим вас за проявленный интерес!\n" +
+                                     "← Вернуться на главную", driver.findElement(investor.thanks).getText());
 
     }
 
     @Test
     public void clickMenu() throws IOException {
+
+        driver.get("http://moneyman:1005@qa-delivery-investor-ru-master.moneyman.ru/");
 
         investor.clickMenu(investor.toCalcYield);
         investor.comparison("Калькулятор доходности");

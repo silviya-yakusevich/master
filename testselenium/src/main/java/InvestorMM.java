@@ -1,8 +1,14 @@
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Random;
+
 
 public class InvestorMM {
 
@@ -32,7 +38,7 @@ public class InvestorMM {
 
     // КАЛЬКУЛЯТООР ДОХОДНОСТИ
     public By currencyRUB = By.xpath("(//span[contains(normalize-space(), 'рубли')])[3]");
-    public By currencyUSD = By.xpath("(//span[contains(normalize-space(), 'доллары США')])[3]");
+    public By currencyUSD = By.xpath("//span[@class='wpcf7-list-item-label' and text()='доллары США']");
     public By currencyEUR = By.xpath("(//span[contains(normalize-space(), 'евро')])[3]");
     public By term6month = By.xpath("//div[@class='calc_term calc_item']//label[@for='term1']");
     public By term12month = By.xpath("//div[@class='calc_term calc_item']//label[@for='term2']");
@@ -67,13 +73,15 @@ public class InvestorMM {
 
     public String profitAmountField () //получить текст валидацинного сообщения
     {
-        String profitAmount = driver.findElement(By.xpath("//div[@class='profit_value']")).getText();//сумма вложений, выводимая после выбора значения
+        String profitAmount1 = driver.findElement(By.xpath("//div[@class='profit_value']")).getText();//сумма вложений, выводимая после выбора значения
+        String profitAmount = profitAmount1.replace(" ", "");
         return profitAmount;
     }
 
     public String profitSumField () //получить текст валидацинного сообщения
     {
-        String profitSum = driver.findElement(By.xpath("//div[@class='profit_value']")).getText();// сумма вложений + дохода от вложений за указанный срок
+        String profitSum1 = driver.findElement(By.xpath("//div[@class='profit_sum']")).getText();// сумма вложений + дохода от вложений за указанный срок
+        String profitSum = profitSum1.replace(" ", "");
         return profitSum;
     }
 
@@ -82,15 +90,22 @@ public class InvestorMM {
         return this;
     }
     public InvestorMM chooseParams(By currency, By term, int amount,double percent) {
+
+
         driver.findElement(currency).click();
         driver.findElement(term).click();
         driver.findElement(amountInput).sendKeys(String.valueOf(amount));
-        double sum = amount * percent;
-        Assert.assertEquals(amount + " руб.", profitAmountField());
-        Assert.assertEquals(Math.round(sum) + " руб.", profitSumField());
+        driver.findElement(amountInput).sendKeys(Keys.TAB);
+
+        double sum = amount *(1+ percent);
+        Assert.assertEquals(amount + "$", profitAmountField());
+        Assert.assertEquals(Math.round(sum) + "$", profitSumField());
         return this;
     }
+
     public InvestorMM fillThForm(String lastname, String firstname, String phonenumber, String emailaddress){
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
 
         driver.findElement(lastName).sendKeys(lastname);
         driver.findElement(firstName).sendKeys(firstname);
@@ -124,7 +139,13 @@ public class InvestorMM {
         WebDriverWait wait = (new WebDriverWait(driver,10));// явное ожидание
         wait.until (ExpectedConditions.presenceOfElementLocated(linkForWait));
         return this;
-    } //
+    }
+
+    public static double getRandomIntegerBetweenRange(double min, double max){
+        double x = (int)(Math.random()*((max-min)+1))+min;
+        return x;
+    }
+
 
 
 
