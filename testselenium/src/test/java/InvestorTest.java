@@ -22,15 +22,15 @@ public class InvestorTest {
     @Before
     public void setUp()
     {
-        System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
-        driver = new FirefoxDriver();
+//        System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
+//        driver = new FirefoxDriver();
 
 
-//        System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe") ;
-//        ChromeOptions options = new ChromeOptions();
-//        options.setHeadless(true);
-//        options.addArguments("--window-size=1920,1080");
-//        driver = new ChromeDriver(options);
+        System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe") ;
+        ChromeOptions options = new ChromeOptions();
+        options.setHeadless(true);
+        options.addArguments("--window-size=1920,1080");
+        driver = new ChromeDriver(options);
 
 
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
