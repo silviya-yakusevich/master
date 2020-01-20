@@ -140,9 +140,6 @@ public class MainPage {
 
     public MainPage checkAllCookies (String cookiePartner, String cookieAnother, String landCodeRU) // проверка кук
     {
-
-
-
         String partner = driver.manage().getCookieNamed("partner").getValue();
         String source = driver.manage().getCookieNamed("partner_utm_source").getValue();
         String medium = driver.manage().getCookieNamed("partner_utm_medium").getValue();

@@ -26,7 +26,7 @@ public class MainPageTest {
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
+            options.setHeadless(true);
             options.addArguments("--window-size=1920,1080");
             driver = new ChromeDriver(options);
 
