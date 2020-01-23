@@ -15,23 +15,24 @@ public class SolvaRuTest {
     @Before
     public void setUp()
     {
-        System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
+//      System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
+//      driver = new FirefoxDriver();
+//      driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+//      driver.manage().window().maximize();
+
         System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe") ;
-
-
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        options.setHeadless(true);
+        options.addArguments("--window-size=1920,1080");
         driver = new ChromeDriver(options);
 
-        //driver = new FirefoxDriver();
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-        driver.get("http://moneyman:1005@qa-delivery-solva-ru-master.moneyman.ru?partner=mmru&utm_source=mm&utm_medium=mm&utm_campaign=mm&keyword=mm&wmid=mm&utm_term=mm&utm_content=mm");
         solvaruPage = new MainPage (driver);
     }
 
     @Test
     public void correctCookie(){
+
+        driver.get("http://moneyman:1005@qa-delivery-solva-ru-master.moneyman.ru?partner=mmru&utm_source=mm&utm_medium=mm&utm_campaign=mm&keyword=mm&wmid=mm&utm_term=mm&utm_content=mm");
         driver.findElement(By.xpath("//a[@class='header_section__link']")).click();// переход на регистрацию по верхней кнопке "Получить первый заем под 0%"
 
         solvaruPage.checkAllCookies("mmru","mm","404");
@@ -43,14 +44,28 @@ public class SolvaRuTest {
 
     @Test
     public void responseCodeReg() throws IOException {
-        solvaruPage.checkResponseCode("http://solva.ru",By.xpath("//a[@class='header_section__link']"));
+
+        driver.get("https://solva.ru/");
+        driver.findElement(By.xpath("//a[@class='header_section__link']")).click();
+        solvaruPage.checkResponseCode(200);
 
     }
 
     @Test
     public void responseCodeLogin() throws IOException {
 
-        solvaruPage.checkResponseCode("http://solva.ru",By.className("footer__login-button"));
+        driver.get("https://solva.ru/");
+        driver.findElement(By.className("footer__login-button")).click();
+        solvaruPage.checkResponseCode(200);
+
+    }
+
+    @Test
+    public void thereAreNoIndex(){
+
+        driver.get("https://solva.ru/");
+        Assert.assertEquals("There are no noindex,nofollow", solvaruPage.noIndex());
+
     }
 
     @After

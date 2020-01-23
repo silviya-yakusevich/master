@@ -25,7 +25,7 @@ public class MainPage {
     public By sum_slider = By.xpath("(//span[@class='ui-slider-handle ui-corner-all ui-state-default'])[1]"); //слайдер суммы
     public By days_slider = By.xpath("(//span[@class='ui-slider-handle ui-corner-all ui-state-default'])[2]"); //слайдер дней
     public By getMoneyButton = By.xpath("//div[@class='rcalc_submit btn btn_red']");// кнопка "Получить деньги" на калькуляторе
-    public By loginButton = By.className("header_private_link"); // кнопка "Личный кабинет"
+    public By loginButton = By.xpath("//a[@class='header_private_link']"); // кнопка "Личный кабинет"
 
     public By about = By.xpath("//a[text() = 'О нас']");
     public By howItWorks = By.xpath("//a[text() = 'Как это работает']");
@@ -50,13 +50,27 @@ public class MainPage {
 
     }
 
-    public MainPage sendPromo(String promo)// ввести промокод
+    public MainPage checkResponseCode (int expectedCode) throws IOException // получение response code
     {
-        driver.findElement(promoField).sendKeys(promo); //вставить значение промокода в поле
-        driver.findElement(promoField).sendKeys(Keys.TAB); //анфокус
-        WebDriverWait wait = (new WebDriverWait(driver,10));// явное ожидание
-        wait.until (ExpectedConditions.visibilityOf(driver.findElement(promoValidateText)));//условие  ожидания - пока не появится элемент с текстом о корректности/некорректности промокода
+
+        URL url = new URL(driver.getCurrentUrl());
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();
+        http.setRequestMethod("GET");
+
+        int code = http.getResponseCode();
+        Assert.assertEquals(driver.getCurrentUrl(),expectedCode, code);
+
         return this;
+    }
+
+    public MainPage sendPromo(String promo) // ввести промокод
+    {
+
+            driver.findElement(promoField).sendKeys(promo); //вставить значение промокода в поле
+            driver.findElement(promoField).sendKeys(Keys.TAB); //анфокус
+            WebDriverWait wait = (new WebDriverWait(driver, 10));// явное ожидание
+            wait.until(ExpectedConditions.visibilityOf(driver.findElement(promoValidateText)));//условие  ожидания - пока не появится элемент с текстом о корректности/некорректности промокода
+            return this;
     }
 
     public MainPage printValidMessage (String promo) // вывод валидационного сообщения
@@ -164,19 +178,7 @@ public class MainPage {
     }
 
 
-    public MainPage checkResponseCode (String link, By button) throws IOException // получение response code
-    {
-        driver.get(link);
-        driver.findElement(button).click();//переход в ЛК
-        URL url = new URL(driver.getCurrentUrl());
-        HttpURLConnection http = (HttpURLConnection) url.openConnection();
-        http.setRequestMethod("GET");
 
-        int code = http.getResponseCode();
-        Assert.assertEquals(200, code);
-
-        return this;
-    }
 
 
     public MainPage clickMenu(By link) {
@@ -187,7 +189,9 @@ public class MainPage {
 
     public MainPage comparison (String h1) {
 
-        Assert.assertEquals(h1, driver.findElement(By.xpath("//h1")).getText());
+        String getlink = driver.getCurrentUrl();
+        Assert.assertEquals(getlink, h1, driver.findElement(By.xpath("//h1")).getText());
+
         return this;
     } // сравнение заголовка с заданным значением
 
@@ -197,6 +201,23 @@ public class MainPage {
             driver.switchTo().window(windowHandle);
         }
         return this;
+    }
+
+    public String  noIndex() {
+
+        try {
+
+            WebElement element = driver.findElement(By.xpath("//meta[@content='noindex, nofollow']"));
+
+            String result = "There are noindex,nofollow";
+            return result;
+
+        } catch (NoSuchElementException e) {
+
+            String result = "There are no noindex,nofollow";
+            return result;
+
+        }
     }
 
     public MainPage quit()//закрытие браузера

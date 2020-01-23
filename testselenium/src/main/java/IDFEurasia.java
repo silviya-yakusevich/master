@@ -1,5 +1,6 @@
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -86,11 +87,10 @@ public class IDFEurasia {
 
 
 
-    public IDFEurasia openVacation()
+    public IDFEurasia openVacation(String link)
     {
 
-        driver.findElement(careers).click();
-        driver.findElement(careerBelarus).click();
+        driver.get(link);
         //new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(plusButton)));
         driver.findElement(plusButton).click();
         new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfElementLocated((applytoPosition))).click();
@@ -104,7 +104,7 @@ public class IDFEurasia {
         driver.findElement(lastName).sendKeys("ТЕСТ");
         driver.findElement(email).sendKeys("test@test.te");
         driver.findElement(message).sendKeys("ТЕСТ");
-        driver.findElement(uploadFile).sendKeys("C:\\Users\\User10\\Desktop\\111.docx");
+        driver.findElement(uploadFile).sendKeys("C:\\Users\\User10\\Desktop\\test.docx");
         new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='droparea has-file']")))); //ожидание успешной загрузки файла
 
         return this;
@@ -125,7 +125,8 @@ public class IDFEurasia {
 
     public IDFEurasia equalTitle (String title) {
 
-        Assert.assertEquals(title, driver.getTitle()); // сравнение заголовка с заданным значением
+        String getlink = driver.getCurrentUrl();
+        Assert.assertEquals(getlink, title, driver.getTitle()); // сравнение заголовка с заданным значением
         return this;
     }
 
@@ -157,17 +158,16 @@ public class IDFEurasia {
 
 
 
-    public IDFEurasia checkResponseCode(String link, By lang) throws IOException {
+    public IDFEurasia checkResponseCode(int expectedCode, By lang) throws IOException {
 
-        driver.get(link);
         driver.findElement(allLang).click();
         driver.findElement(lang).click();
-        URL url = new URL(driver.getCurrentUrl());
-        HttpURLConnection http = (HttpURLConnection) url.openConnection();
-        http.setRequestMethod("GET");
+        URL url = new URL(driver.getCurrentUrl());//вытаскиваем урл и передаем в URL
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();// устанавливаем соединение
+        http.setRequestMethod("GET");//задаем метод
+        int code = http.getResponseCode();//получаем код ответа
 
-        int code = http.getResponseCode();
-        Assert.assertEquals(200, code);
+        Assert.assertEquals(driver.getCurrentUrl(),expectedCode, code); //сравниваем
 
         return this;
     }
@@ -199,12 +199,36 @@ public class IDFEurasia {
     }
 
 
+    public String  noIndex() {
 
+        try {
 
+            WebElement element = driver.findElement(By.xpath("//meta[@content='noindex, nofollow']"));
 
+            String result = "There are noindex,nofollow";
+            return result;
 
+        } catch (NoSuchElementException e) {
 
+            String result = "There are no noindex,nofollow";
+            return result;
 
-
-
+        }
     }
+
+    public IDFEurasia quit(){
+
+        driver.quit();
+        return this;
+    }
+
+
+
+
+
+
+
+
+
+
+}

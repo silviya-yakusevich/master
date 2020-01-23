@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.IOException;
+import java.sql.Driver;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(Enclosed.class)
@@ -22,26 +23,28 @@ public class MainPageTest {
 
         @Before
         public void setUp() {
-            // System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
-            System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
-            ChromeOptions options = new ChromeOptions();
-            options.setHeadless(true);
-            options.addArguments("--window-size=1920,1080");
-            driver = new ChromeDriver(options);
-
+//        System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
 //        driver = new FirefoxDriver();
 //        driver.manage().timeouts().implicitlyWait(20,TimeUnit.SECONDS);
 //        driver.manage().window().maximize();
-            driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru?partner=mmru&utm_source=mm&utm_medium=mm&utm_campaign=mm&keyword=mm&wmid=mm&utm_term=mm&utm_content=mm");
-            mainPage = new MainPage(driver);
+//
+          System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
+          ChromeOptions options = new ChromeOptions();
+          options.setHeadless(true);
+          options.addArguments("--window-size=1920,1080");
+          driver = new ChromeDriver(options);
+
+
+          driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru?partner=mmru&utm_source=mm&utm_medium=mm&utm_campaign=mm&keyword=mm&wmid=mm&utm_term=mm&utm_content=mm");
+          mainPage = new MainPage(driver);
         }
 
         @Test
         public void correctPromo() {
             mainPage.clickPromo();
             mainPage.sendPromo("MF");
-            Assert.assertEquals("Ваша скидка 25%", mainPage.getValidateText());
+            Assert.assertEquals("Ваша скидка 90%", mainPage.getValidateText());
         }
 
         @Test
@@ -93,30 +96,7 @@ public class MainPageTest {
             Assert.assertTrue("Login button", driver.getCurrentUrl().contains("qa-delivery-ru-master.moneyman.ru/secure/login"));
         }
 
-        @Test
-        public void responseCodeReg() throws IOException {
 
-            mainPage.checkResponseCode("https://moneyman.ru", mainPage.getMoneyButton);
-
-        }
-
-        @Test
-        public void responseCodeLogin() throws IOException {
-
-            mainPage.checkResponseCode("https://moneyman.ru", mainPage.loginButton);
-        }
-
-        @Test
-        public void responseCodeMain() throws IOException {
-
-            mainPage.checkResponseCode("https://moneyman.ru/lp/main", mainPage.loginButton);
-        }
-
-        @Test
-        public void responseCodeMain3() throws IOException {
-
-            mainPage.checkResponseCode("https://moneyman.ru/lp/main3", mainPage.loginButton);
-        }
 
         @Test
         public void clickMenu() throws IOException {
@@ -183,7 +163,7 @@ public class MainPageTest {
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
+            options.setHeadless(true);
             options.addArguments("--window-size=1920,1080");
             driver = new ChromeDriver(options);
             mainPage = new MainPage(driver);
@@ -208,6 +188,79 @@ public class MainPageTest {
             mainPage.calcValue("12000", "15");
             mainPage.dragAndDrop(15, 0);
             mainPage.calcValue("14500", "16");
+
+        }
+
+//        @After
+//        public void tearDown() {
+//            mainPage.quit();
+//
+//        }
+
+
+
+    }
+
+    public static class MMRU_prod {
+
+        private WebDriver driver;
+        private MainPage mainPage;
+
+        @Before
+        public void setUp3() {
+
+            System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
+
+            ChromeOptions options = new ChromeOptions();
+            options.setHeadless(true);
+            options.addArguments("--window-size=1920,1080");
+            driver = new ChromeDriver(options);
+            mainPage = new MainPage(driver);
+        }
+
+        @Test
+        public void thereAreNoIndex(){
+
+            driver.get("http://moneyman.ru/");
+            Assert.assertEquals("There are no noindex,nofollow", mainPage.noIndex());
+
+        }
+
+        @Test
+        public void responseCodeReg() throws IOException {
+
+            driver.get("http://moneyman.ru/");
+            driver.findElement(mainPage.getMoneyButton).click();
+            mainPage.checkResponseCode(200);
+
+        }
+
+        @Test
+        public void responseCodeLogin() throws IOException {
+
+
+            driver.get("http://moneyman.ru/");
+            driver.findElement(mainPage.loginButton).click();
+            mainPage.checkResponseCode(200);
+        }
+
+        @Test
+        public void responseCodeLPMain() throws IOException {
+
+            driver.get("http://moneyman.ru/lp/main");
+            mainPage.checkResponseCode(200);
+        }
+
+        @Test
+        public void responseCodeLPMain3() throws IOException {
+
+            driver.get("http://moneyman.ru/lp/main3");
+            mainPage.checkResponseCode(200);
+        }
+
+        @After
+        public void tearDown() {
+            mainPage.quit();
 
         }
 

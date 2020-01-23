@@ -160,7 +160,9 @@ public class IDFinance {
 
     public IDFinance equalTitle (String title) {
 
-        Assert.assertEquals(title, driver.getTitle()); // сравнение заголовка с заданным значением
+        String getlink = driver.getCurrentUrl();
+        Assert.assertEquals(getlink, title, driver.getTitle()); // сравнение заголовка с заданным значением
+
         return this;
     } // сравнение заголовка с заданным значением
 
@@ -207,9 +209,9 @@ public class IDFinance {
 
     }
 
-    public IDFinance checkResponseCode(String link, By lang) throws IOException {
+    public IDFinance checkResponseCode(By lang) throws IOException {
 
-        driver.get(link);
+
         driver.findElement(lang).click();
         URL url = new URL(driver.getCurrentUrl());
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
@@ -218,6 +220,29 @@ public class IDFinance {
         int code = http.getResponseCode();
         Assert.assertEquals(200, code);
 
+        return this;
+    }
+
+    public String  noIndex() {
+
+        try {
+
+            WebElement element = driver.findElement(By.xpath("//meta[@content='noindex, nofollow']"));
+
+            String result = "There are noindex,nofollow";
+            return result;
+
+        } catch (NoSuchElementException e) {
+
+            String result = "There are no noindex,nofollow";
+            return result;
+
+        }
+    }
+
+    public IDFinance quit(){
+
+        driver.quit();
         return this;
     }
 

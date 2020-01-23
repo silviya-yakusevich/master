@@ -1,10 +1,11 @@
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -130,7 +131,9 @@ public class InvestorMM {
 
     public InvestorMM comparison (String h1) {
 
-        Assert.assertEquals(h1, driver.findElement(By.xpath("//h1")).getText());
+        String getlink = driver.getCurrentUrl();
+        Assert.assertEquals(getlink, h1, driver.findElement(By.xpath("//h1")).getText());
+
         return this;
     } // сравнение заголовка с заданным значением
 
@@ -144,6 +147,42 @@ public class InvestorMM {
     public static double getRandomIntegerBetweenRange(double min, double max){
         double x = (int)(Math.random()*((max-min)+1))+min;
         return x;
+    }
+
+    public InvestorMM checkResponseCode (int expectedCode) throws IOException // получение response code
+    {
+
+        URL url = new URL(driver.getCurrentUrl());//вытаскиваем урл и передаем в URL
+        HttpURLConnection http = (HttpURLConnection) url.openConnection();// устанавливаем соединение
+        http.setRequestMethod("GET");//задаем метод
+        int code = http.getResponseCode();//получаем код ответа
+
+        Assert.assertEquals(driver.getCurrentUrl(),expectedCode, code); //сравниваем
+
+        return this;
+    }
+
+    public String  noIndex() {
+
+        try {
+
+            WebElement element = driver.findElement(By.xpath("//meta[@content='noindex, nofollow']"));
+
+            String result = "There are noindex,nofollow";
+            return result;
+
+        } catch (NoSuchElementException e) {
+
+            String result = "There are no noindex,nofollow";
+            return result;
+
+        }
+    }
+
+    public InvestorMM quit(){
+
+        driver.quit();
+        return this;
     }
 
 
