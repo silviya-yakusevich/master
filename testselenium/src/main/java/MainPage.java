@@ -70,7 +70,7 @@ public class MainPage {
             driver.findElement(promoField).sendKeys(Keys.TAB); //анфокус
             WebDriverWait wait = (new WebDriverWait(driver, 10));// явное ожидание
             wait.until(ExpectedConditions.visibilityOf(driver.findElement(promoValidateText)));//условие  ожидания - пока не появится элемент с текстом о корректности/некорректности промокода
-            String result = driver.findElement(promoValidateText).toString();
+            String result = driver.findElement(promoValidateText).getText();
             return result;
         }
 

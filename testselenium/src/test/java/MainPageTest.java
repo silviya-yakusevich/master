@@ -38,21 +38,21 @@ public class MainPageTest {
         }
 
         @Test
-        public void correctPromo() {
+        public void checkCorrectPromo() {
             mainPage.clickPromo();
             String resultMessage = mainPage.sendPromo("MF");
             Assert.assertEquals("Ваша скидка 90%", resultMessage);
         }
 
         @Test
-        public void incorrectPromo() {
+        public void checkIncorrectPromo() {
             mainPage.clickPromo();
             String resultMessage = mainPage.sendPromo("147");
             Assert.assertEquals("Введен неверный промокод", resultMessage);
         }
 
         @Test
-        public void cookiePromo() {
+        public void checkCookiePromo() {
 
             mainPage.setCookie("promocode", "MF");
             mainPage.checkPromocodeCookie();
@@ -72,7 +72,7 @@ public class MainPageTest {
         }
 
         @Test
-        public void defaultValue() {
+        public void checkDefaultValues() {
 
             mainPage.checkCalcValue("9000", "24");
             mainPage.dragAndDrop(15, 0);
@@ -83,7 +83,7 @@ public class MainPageTest {
 
         @Test
 
-        public void regPage() {
+        public void checkSecureLinks() {
 
             mainPage.authRegistration();
             mainPage.clickGetMoney();
@@ -167,7 +167,7 @@ public class MainPageTest {
         }
 
         @Test
-        public void defaultValue_lpmain() {
+        public void checkDefaultValues_lpmain() {
 
            driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru/lp/main");
             mainPage.checkLpMainCalcValues();
@@ -175,7 +175,7 @@ public class MainPageTest {
         }
 
         @Test
-        public void defaultValue_lpmain3() {
+        public void checkDefaultValues_lpmain3() {
 
             driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru/lp/main3");
 
@@ -190,8 +190,6 @@ public class MainPageTest {
             mainPage.quit();
 
         }
-
-
 
     }
 
@@ -221,7 +219,7 @@ public class MainPageTest {
         }
 
         @Test
-        public void responseCodeReg() throws IOException {
+        public void checkResponseCodeReg() throws IOException {
 
             driver.get("http://moneyman.ru/");
             driver.findElement(mainPage.getMoneyButton).click();
@@ -230,7 +228,7 @@ public class MainPageTest {
         }
 
         @Test
-        public void responseCodeLogin() throws IOException {
+        public void checkResponseCodeLogin() throws IOException {
 
 
             driver.get("http://moneyman.ru/");
@@ -239,14 +237,14 @@ public class MainPageTest {
         }
 
         @Test
-        public void responseCodeLPMain() throws IOException {
+        public void checkResponseCodeLPMain() throws IOException {
 
             driver.get("http://moneyman.ru/lp/main");
             mainPage.checkResponseCode(200);
         }
 
         @Test
-        public void responseCodeLPMain3() throws IOException {
+        public void checkResponseCodeLPMain3() throws IOException {
 
             driver.get("http://moneyman.ru/lp/main3");
             mainPage.checkResponseCode(200);
