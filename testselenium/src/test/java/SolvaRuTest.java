@@ -5,7 +5,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class SolvaRuTest {
 
@@ -64,7 +63,7 @@ public class SolvaRuTest {
     public void thereAreNoIndex(){
 
         driver.get("https://solva.ru/");
-        Assert.assertEquals("There are no noindex,nofollow", solvaruPage.noIndex());
+        Assert.assertEquals("There are no noindex,nofollow", solvaruPage.checkNoIndex());
 
     }
 

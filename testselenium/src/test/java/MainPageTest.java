@@ -55,9 +55,9 @@ public class MainPageTest {
         public void cookiePromo() {
 
             mainPage.setCookie("promocode", "MF");
-            mainPage.promocodeCookie();
+            mainPage.checkPromocodeCookie();
 
-            Assert.assertEquals("MF", mainPage.promocodeCookie());
+            Assert.assertEquals("MF", mainPage.checkPromocodeCookie());
         }
 
         @Test
@@ -99,44 +99,44 @@ public class MainPageTest {
         public void clickMenu() throws IOException {
 
             mainPage.clickMenu(mainPage.about);
-            mainPage.comparison("Moneyman – ваш личный финансовый помощник");
+            mainPage.h1Comparison("Moneyman – ваш личный финансовый помощник");
 
             mainPage.clickMenu(mainPage.howItWorks);
-            mainPage.comparison("Как это работает");
+            mainPage.h1Comparison("Как это работает");
 
             mainPage.clickMenu(mainPage.recieveMoney);
-            mainPage.comparison("Как получить онлайн займ");
+            mainPage.h1Comparison("Как получить онлайн займ");
 
             mainPage.clickMenu(mainPage.returnCredit);
-            mainPage.comparison("Как погасить заем");
+            mainPage.h1Comparison("Как погасить заем");
 
             mainPage.clickMenu(mainPage.faq);
-            mainPage.comparison("Вопросы и ответы");
+            mainPage.h1Comparison("Вопросы и ответы");
 
             mainPage.clickMenu(mainPage.news);
-            mainPage.comparison("Новости и акции");
+            mainPage.h1Comparison("Новости и акции");
 
             mainPage.clickMenu(mainPage.docs);
-            mainPage.comparison("Документы");
+            mainPage.h1Comparison("Документы");
 
             mainPage.clickMenu(mainPage.inform);
-            mainPage.comparison("Раскрытие информации");
+            mainPage.h1Comparison("Раскрытие информации");
 
             mainPage.clickMenu(mainPage.contacts);
-            mainPage.comparison("Контакты");
+            mainPage.h1Comparison("Контакты");
 
             mainPage.clickMenu(mainPage.spisok);
-            mainPage.comparison("Список акционеров (участников) микрофинансовой компании и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
+            mainPage.h1Comparison("Список акционеров (участников) микрофинансовой компании и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
 
             mainPage.clickMenu(mainPage.scheme);
-            mainPage.comparison("Схема взаимосвязей участников ООО МФК «Мани Мен» и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
+            mainPage.h1Comparison("Схема взаимосвязей участников ООО МФК «Мани Мен» и лиц, под контролем либо значительным влиянием которых находится микрофинансовая компания");
 
             mainPage.clickMenu(mainPage.zhaloba);
-            mainPage.comparison("Приемная омбудсмена по правам заемщика");
+            mainPage.h1Comparison("Приемная омбудсмена по правам заемщика");
 
             mainPage.clickMenu(mainPage.invest);
             mainPage.tabs();
-            mainPage.comparison("Зарабатывай вместе с MoneyMan");
+            mainPage.h1Comparison("Зарабатывай вместе с MoneyMan");
 
 
         }
@@ -160,7 +160,7 @@ public class MainPageTest {
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
             ChromeOptions options = new ChromeOptions();
-            //options.setHeadless(true);
+            options.setHeadless(true);
             options.addArguments("--window-size=1920,1080");
             driver = new ChromeDriver(options);
             mainPage = new MainPage(driver);
@@ -185,11 +185,11 @@ public class MainPageTest {
 
         }
 
-//        @After
-//        public void tearDown() {
-//            mainPage.quit();
-//
-//        }
+        @After
+        public void tearDown() {
+            mainPage.quit();
+
+        }
 
 
 
@@ -216,7 +216,7 @@ public class MainPageTest {
         public void thereAreNoIndex(){
 
             driver.get("http://moneyman.ru/");
-            Assert.assertEquals("There are no noindex,nofollow", mainPage.noIndex());
+            Assert.assertEquals("There are no noindex,nofollow", mainPage.checkNoIndex());
 
         }
 

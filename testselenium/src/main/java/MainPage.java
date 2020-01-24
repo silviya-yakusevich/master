@@ -103,7 +103,7 @@ public class MainPage {
         return text;
     }
 
-    public String promocodeCookie () //проверка создания куки checkpromocode и ее значения
+    public String checkPromocodeCookie() //проверка создания куки checkpromocode и ее значения
     {
        String check = driver.manage().getCookieNamed("promocode").getValue(); //значение параметра promocode в куках
        return check;
@@ -115,7 +115,6 @@ public class MainPage {
         Cookie promocode = new Cookie(cookieName, promo);
         driver.manage().addCookie(promocode);
         driver.navigate().refresh();
-
         return this;
     }
 
@@ -207,16 +206,13 @@ public class MainPage {
     }
 
 
-
-
-
     public MainPage clickMenu(By link) {
         driver.findElement(link).click();
         return this;
     }
 
 
-    public MainPage comparison (String h1) {
+    public MainPage h1Comparison(String h1) {
 
         String getlink = driver.getCurrentUrl();
         Assert.assertEquals(getlink, h1, driver.findElement(By.xpath("//h1")).getText());
@@ -232,7 +228,7 @@ public class MainPage {
         return this;
     }
 
-    public String  noIndex() {
+    public String checkNoIndex() {
 
         try {
 
