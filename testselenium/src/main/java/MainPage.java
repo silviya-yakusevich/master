@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainPage {
@@ -77,7 +76,7 @@ public class MainPage {
 
         catch (Exception e)
         {
-            String result = e.toString();
+            String result = e.getMessage();
             return result;
         }
 
@@ -120,7 +119,7 @@ public class MainPage {
         return this;
     }
 
-    public MainPage calcValue(String expectedSum, String expectedDays)//сравнение дефолтнах знаечений суммы
+    public MainPage checkCalcValue(String expectedSum, String expectedDays)//сравнение дефолтных значений суммы
     {
         String sumValue = driver.findElement(calc_amount).getAttribute("value");//значение суммы на калькуляторе
         String daysValue = driver.findElement(calc_days).getAttribute("value");//значение дней  на калькуляторе
@@ -130,6 +129,26 @@ public class MainPage {
 
 
         return this;
+    }
+
+
+    public MainPage checkLpMainCalcValues(){
+
+        String abCookies = driver.manage().getCookieNamed("ga-ab-testing").getValue();
+
+
+        if (abCookies.equals("48788-A")){
+            this.checkCalcValue("9000","24");
+            return this;
+        }
+        else if (abCookies.equals("48788-B")) {
+            this.checkCalcValue("12000", "24");
+            return this;
+        }
+        else {
+            this.checkCalcValue("14000", "24");
+            return this;
+        }
     }
 
     public MainPage dragAndDrop( int xOffset, int yOffset) // перетаскивание ползунка

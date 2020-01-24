@@ -4,11 +4,8 @@ import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.io.IOException;
-import java.sql.Driver;
-import java.util.concurrent.TimeUnit;
 
 @RunWith(Enclosed.class)
 public class MainPageTest {
@@ -43,15 +40,15 @@ public class MainPageTest {
         @Test
         public void correctPromo() {
             mainPage.clickPromo();
-            String result = mainPage.sendPromo("MF");
-            Assert.assertEquals("Ваша скидка 90%", result);
+            String resultMessage = mainPage.sendPromo("MF");
+            Assert.assertEquals("Ваша скидка 90%", resultMessage);
         }
 
         @Test
         public void incorrectPromo() {
             mainPage.clickPromo();
-            mainPage.sendPromo("147");
-            Assert.assertEquals("Введен неверный промокод", mainPage.getValidateText());
+            String resultMessage = mainPage.sendPromo("147");
+            Assert.assertEquals("Введен неверный промокод", resultMessage);
         }
 
         @Test
@@ -77,9 +74,9 @@ public class MainPageTest {
         @Test
         public void defaultValue() {
 
-            mainPage.calcValue("9000", "24");
+            mainPage.checkCalcValue("9000", "24");
             mainPage.dragAndDrop(15, 0);
-            mainPage.calcValue("11500", "25");
+            mainPage.checkCalcValue("11500", "25");
 
         }
 
@@ -163,7 +160,7 @@ public class MainPageTest {
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
 
             ChromeOptions options = new ChromeOptions();
-            options.setHeadless(true);
+            //options.setHeadless(true);
             options.addArguments("--window-size=1920,1080");
             driver = new ChromeDriver(options);
             mainPage = new MainPage(driver);
@@ -173,10 +170,7 @@ public class MainPageTest {
         public void defaultValue_lpmain() {
 
            driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru/lp/main");
-
-            mainPage.calcValue("9000", "15");
-            mainPage.dragAndDrop(15, 0);
-            mainPage.calcValue("11500", "16");
+            mainPage.checkLpMainCalcValues();
 
         }
 
@@ -185,9 +179,9 @@ public class MainPageTest {
 
             driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru/lp/main3");
 
-            mainPage.calcValue("12000", "15");
+            mainPage.checkCalcValue("12000", "15");
             mainPage.dragAndDrop(15, 0);
-            mainPage.calcValue("14500", "16");
+            mainPage.checkCalcValue("14500", "16");
 
         }
 
