@@ -63,14 +63,24 @@ public class MainPage {
         return this;
     }
 
-    public MainPage sendPromo(String promo) // ввести промокод
+    public String sendPromo(String promo) // ввести промокод
     {
 
+        try {
             driver.findElement(promoField).sendKeys(promo); //вставить значение промокода в поле
             driver.findElement(promoField).sendKeys(Keys.TAB); //анфокус
             WebDriverWait wait = (new WebDriverWait(driver, 10));// явное ожидание
             wait.until(ExpectedConditions.visibilityOf(driver.findElement(promoValidateText)));//условие  ожидания - пока не появится элемент с текстом о корректности/некорректности промокода
-            return this;
+            String result = driver.findElement(promoValidateText).toString();
+            return result;
+        }
+
+        catch (Exception e)
+        {
+            String result = e.toString();
+            return result;
+        }
+
     }
 
     public MainPage printValidMessage (String promo) // вывод валидационного сообщения

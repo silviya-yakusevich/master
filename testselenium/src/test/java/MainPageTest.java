@@ -43,8 +43,8 @@ public class MainPageTest {
         @Test
         public void correctPromo() {
             mainPage.clickPromo();
-            mainPage.sendPromo("MF");
-            Assert.assertEquals("Ваша скидка 90%", mainPage.getValidateText());
+            String result = mainPage.sendPromo("MF");
+            Assert.assertEquals("Ваша скидка 90%", result);
         }
 
         @Test
