@@ -40,8 +40,6 @@ public class MainPage {
     public By zhaloba =By.xpath("//li[@id = 'menu-item-13888']//a[text() = 'Пожаловаться']");
     public By invest = By.xpath("//a[@href = 'https://investor.moneyman.ru/']");
 
-   // String getValidateText = driver.findElement(promoValidateText).getText();
-
     public MainPage clickPromo()// кликнуть "У меня есть промокод"
     {
         driver.findElement(promoLink).click();//кликнуть на кнопку "У меня есть промокод" на калькуляторе

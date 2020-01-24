@@ -33,7 +33,7 @@ public class DashmanTest {
     }
 
     @Test
-    public void correctCookie(){
+    public void checkCorrectCookie(){
 
         driver.findElement(By.xpath("(//a[text() ='Получить деньги'])[1]")).click();
         dashmanPage.checkAllCookies("mmru","mm", "102");
@@ -51,7 +51,7 @@ public class DashmanTest {
 
     }
     @Test
-    public void responseCodeRegMain() throws IOException {
+    public void checkResponseCodeRegMain() throws IOException {
 
         driver.findElement(By.xpath("(//a[text() ='Получить деньги'])[1]")).click();
         dashmanPage.checkResponseCode(200);
@@ -59,7 +59,7 @@ public class DashmanTest {
           }
 
     @Test
-    public void responseCodeRegMainMid() throws IOException {
+    public void checkResponseCodeRegMainMid() throws IOException {
 
         driver.findElement(By.xpath("(//a[text() ='Получить деньги'])[2]")).click();
         dashmanPage.checkResponseCode(200);
@@ -67,7 +67,7 @@ public class DashmanTest {
 
     }
     @Test
-    public void responseCodeRegMainTf() throws IOException {
+    public void checkResponseCodeRegMainTf() throws IOException {
 
         driver.findElement(By.xpath("//a[@class='rates_item']")).click();
         dashmanPage.checkResponseCode(200);
@@ -76,7 +76,7 @@ public class DashmanTest {
 
 
     @Test
-    public void responseCodeLogin() throws IOException {
+    public void checkResponseCodeLogin() throws IOException {
 
         driver.findElement(By.xpath("//a[@class='private-area']")).click();
         dashmanPage.checkResponseCode(200);
