@@ -42,11 +42,14 @@ public class IDFEURtest {
         }
 
         @Test //проверка отправки формы заявки на вакансию
-        public void sendCV() throws InterruptedException, IOException, AWTException {
-            idfEurasia.openVacation("http://qa-delivery-idfinance-eurasia-ru-master.moneyman.ru/career/positions/?department=all&location=all");
-            idfEurasia.fillTheForm();
-            idfEurasia.sendTheForm();
-            Assert.assertEquals("Ваше сообщение отправлено. Мы свяжемся с Вами в ближайшее время.", driver.findElement(idfEurasia.thanks).getText());
+        public void sendCV() throws IOException {
+           idfEurasia.openVacation("http://qa-delivery-idfinance-eurasia-ru-master.moneyman.ru/career/positions/?department=all&location=all");
+           idfEurasia.fillTheForm("ТЕСТ", "ТЕСТ", "test@test.te", "ТЕСТ", "C:\\Users\\User10\\Desktop\\test.docx");
+           idfEurasia.sendTheForm();
+           Assert.assertEquals("Ваше сообщение отправлено. Мы свяжемся с Вами в ближайшее время.", driver.findElement(idfEurasia.thanks).getText());
+           idfEurasia.openTheMailbox();
+           idfEurasia.checkTheMail("test@test.te");
+
         }
 
 
@@ -57,11 +60,12 @@ public class IDFEURtest {
             idfEurasia.equalTitle("IDF Eurasia – ақылды қаржылық шешімдер");
 
             idfEurasia.clickMenu(idfEurasia.allLang);
+            idfEurasia.clickMenu(idfEurasia.enLang);
+            idfEurasia.equalTitle("IDF Eurasia – smart financial solutions");
+
+            idfEurasia.clickMenu(idfEurasia.allLang);
             idfEurasia.clickMenu(idfEurasia.ruLang);
             idfEurasia.equalTitle("IDF Eurasia – умные финансовые решения");
-
-//        idfEurasia.clickMenu(idfEurasia.enLang);
-//        idfEurasia.equalTitle("Fast Growing Fintech in Europe and Latam | IDFinance"); исправить текст
 
             idfEurasia.clickMenu(idfEurasia.about);
             idfEurasia.equalTitle("О нас - IDF Eurasia");

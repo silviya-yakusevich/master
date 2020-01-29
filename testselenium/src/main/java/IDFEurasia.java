@@ -10,6 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class IDFEurasia {
     private WebDriver driver;
@@ -98,13 +100,15 @@ public class IDFEurasia {
         return this;
     }
 
-    public IDFEurasia fillTheForm() throws IOException {
+    public IDFEurasia fillTheForm(String firstname, String lastname, String emailaddress, String messagetext, String filepath) throws IOException {
 
-        driver.findElement(firstName).sendKeys("ТЕСТ");
-        driver.findElement(lastName).sendKeys("ТЕСТ");
-        driver.findElement(email).sendKeys("test@test.te");
-        driver.findElement(message).sendKeys("ТЕСТ");
-        driver.findElement(uploadFile).sendKeys("C:\\Users\\User10\\Desktop\\test.docx");
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        driver.findElement(firstName).sendKeys(firstname );
+        driver.findElement(lastName).sendKeys(lastname);
+        driver.findElement(email).sendKeys(dateFormat.format(new Date()) + emailaddress);
+        driver.findElement(message).sendKeys(messagetext);
+        driver.findElement(uploadFile).sendKeys(filepath);
         new WebDriverWait(driver, 20).until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@class='droparea has-file']")))); //ожидание успешной загрузки файла
 
         return this;
@@ -119,6 +123,31 @@ public class IDFEurasia {
 //        BufferedImage fullImg = ImageIO.read(screenshot);
 //        File screenshotLocation = new File("C:\\Users\\User10\\IdeaProjects\\testselenium\\yyyyy.png");
 //        FileHandler.copy(screenshot, screenshotLocation);
+
+        return this;
+    }
+
+    public IDFEurasia openTheMailbox(){
+
+        driver.get("https://passport.yandex.by/auth?from=mail&origin=hostroot_homer_auth_L_by&retpath=https%3A%2F%2Fmail.yandex.by%2F&backpath=https%3A%2F%2Fmail.yandex.by%3Fnoretpath%3D1");
+        driver.findElement(By.xpath("//input[@id='passp-field-login']")).sendKeys("test.idcollect@yandex.by");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.findElement(By.xpath("//input[@id='passp-field-passwd']")).sendKeys("idcollect12345");
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        driver.findElement(By.xpath("(//span[contains(text(),'IDF Eurasia')])[1]")).click();
+
+
+        return this;
+    }
+
+    public IDFEurasia checkTheMail(String emailaddress){
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Assert.assertEquals(dateFormat.format(new Date()) + emailaddress, driver.findElement(By.xpath("//a[@class='ns-action']")).getText());
+
+
+
+
 
         return this;
     }
