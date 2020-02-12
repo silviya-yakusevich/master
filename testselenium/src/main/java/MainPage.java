@@ -160,7 +160,7 @@ public class MainPage {
 
     public MainPage authRegistration () //авторизация на странице регистрации (для мастера)
     {
-        driver.get("https://moneyman:1005@qa-delivery-ru-master.moneyman.ru/registration/static/step1.html");
+        driver.get("http://moneyman:1005@qa-delivery-ru-master.moneyman.ru/registration/static/step1.html");
         driver.navigate().back();
         return this;
     }

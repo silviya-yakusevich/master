@@ -84,8 +84,34 @@ public class IDFEurasia {
     public By email = By.xpath("(//input[@name = 'email'])[3]");
     public By message = By.xpath("//textarea[@name = 'message']");
     public By uploadFile = By.xpath("//input[@name = 'fileuploader']");
-    public By sendMessage = By.xpath("//input[@value='Отправить']"); //кнопка SEND MESSAGE в анкете вакансии
+    public By sendMessageButton = By.xpath("//input[@value='Отправить']"); //кнопка SEND MESSAGE в анкете вакансии
     public By thanks = By.xpath("(//div[@class='subtitle'])[3]");
+
+    //калькулятор до заявки на инвестирование
+
+    public By currencyBYN = By.xpath("//li[@data-currency='usd']");
+    public By currencyEUR = By.xpath("//li[@data-currency='eur']");
+    public By currencyRUB = By.xpath("//li[@data-currency='rub']");
+    public By term6months = By.xpath("//div[@class='calcTerm']/span[text()='6']");
+    public By term12months = By.xpath("//div[@class='calcTerm']/span[text()='12']");
+    public By term24months = By.xpath("//div[@class='calcTerm']/span[text()='24']");
+    public By calcAmount = By.xpath("//div[@class='amount']");
+    public By calcTerm= By.xpath("//div[@class='term_item active']//div[@class = 'calcTerm']//span");
+    public By investButton = By.xpath("//a[@class='submit']");
+    public By firstName_invest = By.xpath("//input[@name = 'first_name']");
+    public By lastName_invest = By.xpath("//input[@name = 'last_name']");
+    public By middleName_invest = By.xpath("//input[@name = 'middle_name']");
+    public By email_invest = By.xpath("(//input[@name = 'email'])[2]");
+    public By phone_invest = By.xpath("//input[@name = 'phone']");
+    public By amountInput = By.xpath("//input[@name='amount']");
+    public By currencyInput = By.xpath("//input[@name='currency']");
+    public By termInput = By.xpath("//input[@name='term']");
+    public By submitButton = By.xpath("//button[@type='submit' and text()='Отправить']");
+    public By checkBox = By.xpath("//label[@for = 'check1']");
+
+
+
+
 
 
 
@@ -93,14 +119,13 @@ public class IDFEurasia {
     {
 
         driver.get(link);
-        //new WebDriverWait(driver, 20).until(ExpectedConditions.elementToBeClickable(driver.findElement(plusButton)));
         driver.findElement(plusButton).click();
         new WebDriverWait(driver, 20).until(ExpectedConditions.presenceOfElementLocated((applytoPosition))).click();
 
         return this;
     }
 
-    public IDFEurasia fillTheForm(String firstname, String lastname, String emailaddress, String messagetext, String filepath) throws IOException {
+    public IDFEurasia fillTheVacancyForm(String firstname, String lastname, String emailaddress, String messagetext, String filepath) throws IOException {
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
@@ -114,8 +139,8 @@ public class IDFEurasia {
         return this;
     }
 
-    public IDFEurasia sendTheForm() throws  IOException {
-        driver.findElement(sendMessage).click();
+    public IDFEurasia sendTheVacancyForm() throws  IOException {
+        driver.findElement(sendMessageButton).click();
         new WebDriverWait(driver, 60).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='thanks-modal fancybox-content']")));//ожидание попапа после успешной отправки формы
 
 //        //скрин экрана
@@ -126,6 +151,8 @@ public class IDFEurasia {
 
         return this;
     }
+
+
 
     public IDFEurasia openTheMailbox(){
 
@@ -140,14 +167,58 @@ public class IDFEurasia {
         return this;
     }
 
+    public IDFEurasia setParametersOnTheCalc(By currency, By term) throws IOException {
+
+        driver.findElement(currency);
+        driver.findElement(term);
+        driver.findElement(investButton).click();
+
+        return this;
+    }
+
+    public IDFEurasia fillTheInvestmentForm(String firstname, String lastname, String middlename, String emailaddress, String phonenumber) throws IOException {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+        String amount = driver.findElement(calcAmount).getText();
+
+        driver.findElement(firstName_invest).sendKeys(firstname);
+        driver.findElement(lastName_invest).sendKeys(lastname);
+        driver.findElement(middleName_invest).sendKeys(middlename);
+        driver.findElement(email_invest).sendKeys(dateFormat.format(new Date()) + emailaddress);
+        driver.findElement(phone_invest).sendKeys(phonenumber);
+        try {
+            driver.findElement(By.xpath("//li[@data-currency='rub' and @class=active]"));
+            Assert.assertEquals(driver.findElement(calcAmount).getText(), driver.findElement(amountInput).getText() + " руб.");
+            Assert.assertEquals("RUB", driver.findElement(currencyInput).getText());
+
+        }
+        catch (Exception e){
+            try {
+                driver.findElement(By.xpath("//li[@data-currency='usd' and @class=active]"));
+                Assert.assertEquals(driver.findElement(calcAmount).getText(), driver.findElement(amountInput).getText() + " $");
+                Assert.assertEquals("USD", driver.findElement(currencyInput).getText());
+
+            }
+            catch (Exception ex){
+                driver.findElement(By.xpath("//li[@data-currency='eur' and @class=active]"));
+                Assert.assertEquals(driver.findElement(calcAmount).getText(), driver.findElement(amountInput).getText() + " €");
+                Assert.assertEquals("EUR", driver.findElement(currencyInput).getText());
+
+            }
+        }
+
+        Assert.assertEquals(driver.findElement(calcTerm).getText(),driver.findElement(termInput).getText());
+
+        driver.findElement(submitButton).click();
+
+        return this;
+    }
+
     public IDFEurasia checkTheMail(String emailaddress){
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         Assert.assertEquals(dateFormat.format(new Date()) + emailaddress, driver.findElement(By.xpath("//a[@class='ns-action']")).getText());
-
-
-
-
 
         return this;
     }

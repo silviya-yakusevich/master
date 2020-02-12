@@ -8,7 +8,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +23,7 @@ public class IDFEURtest {
         public void setUp() {
             //System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
             //driver = new FirefoxDriver();
-
+            //driver.manage().window().maximize();
 
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
             ChromeOptions options = new ChromeOptions();
@@ -32,9 +31,7 @@ public class IDFEURtest {
             options.addArguments("--window-size=1920,1080");
             driver = new ChromeDriver(options);
 
-
             driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-            driver.manage().window().maximize();
             driver.get("http://moneyman:1005@qa-delivery-idfinance-eurasia-ru-master.moneyman.ru/");
 
             idfEurasia = new IDFEurasia(driver);
@@ -44,14 +41,23 @@ public class IDFEURtest {
         @Test //проверка отправки формы заявки на вакансию
         public void sendCV() throws IOException {
            idfEurasia.openVacation("http://qa-delivery-idfinance-eurasia-ru-master.moneyman.ru/career/positions/?department=all&location=all");
-           idfEurasia.fillTheForm("ТЕСТ", "ТЕСТ", "test@test.te", "ТЕСТ", "C:\\Users\\User10\\Desktop\\test.docx");
-           idfEurasia.sendTheForm();
+           idfEurasia.fillTheVacancyForm("ТЕСТ", "ТЕСТ", "test@test.te", "ТЕСТ", "C:\\Users\\User10\\Desktop\\test.docx");
+           idfEurasia.sendTheVacancyForm();
            Assert.assertEquals("Ваше сообщение отправлено. Мы свяжемся с Вами в ближайшее время.", driver.findElement(idfEurasia.thanks).getText());
            idfEurasia.openTheMailbox();
            idfEurasia.checkTheMail("test@test.te");
 
         }
 
+        @Test
+        public void sendApplicationForInvestment() throws IOException {
+
+            idfEurasia.moveToElement(idfEurasia.investors);
+            idfEurasia.clickMenu(idfEurasia.loans);
+            idfEurasia.setParametersOnTheCalc(idfEurasia.currencyEUR, idfEurasia.term12months);
+            idfEurasia.fillTheInvestmentForm("test", "test", "test","test@test.te","11111111");
+
+        }
 
         @Test//прокликивание основных страниц, сопоставление title
         public void clickLinks() throws IOException {
@@ -169,7 +175,7 @@ public class IDFEURtest {
         public void setUp() {
             //System.setProperty("webdriver.gecko.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\geckodriver.exe");
             //driver = new FirefoxDriver();
-
+            //driver.manage().window().maximize();
 
             System.setProperty("webdriver.chrome.driver", "C:\\Users\\User10\\IdeaProjects\\testselenium\\drivers\\chromedriver.exe");
             ChromeOptions options = new ChromeOptions();
@@ -177,9 +183,7 @@ public class IDFEURtest {
             options.addArguments("--window-size=1920,1080");
             driver = new ChromeDriver(options);
 
-
             driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-            driver.manage().window().maximize();
             driver.get("https://idfeurasia.com/");
 
             idfEurasia = new IDFEurasia(driver);
